@@ -7,6 +7,12 @@
   register: ssh_known_host_results
   ignore_errors: yes
   
+- name: Create the "{{ ssh_directory }}" directory if it doesn't exist
+  file:
+    path: "{{ ssh_directory }}" 
+    state: directory
+    mode: 0755  
+  
 - name: Touch the "{{ ssh_auth_keys_file }}" file
   file:
     path: "{{ ssh_auth_keys_file }}"
