@@ -14,14 +14,6 @@
     path: "{{ ssh_known_hosts_file }}"
   with_items: "{{ ssh_known_host_results.results }}"
     
-- name: Set up multiple authorized keys 
-  authorized_key:
-    user: awx
-    state: present
-    key: "{{ item.stdout }}"
-    path: "{{ ssh_known_hosts_file }}"
-  with_items: "{{ ssh_known_host_results.results }}"
-    
 - name: Add/update the public key in the '{{ ssh_known_hosts_file }}'
   known_hosts:
     name: "{{ item.item }}"
@@ -29,5 +21,11 @@
     state: "present"
     path: "{{ ssh_auth_keys_file }}"
   with_items: "{{ ssh_known_host_results.results }}"
-
-
+    
+- name: Set up multiple authorized keys 
+  authorized_key:
+    user: awx
+    state: present
+    key: "{{ item.stdout }}"
+    path: "{{ ssh_known_hosts_file }}"
+  with_items: "{{ ssh_known_host_results.results }}"
