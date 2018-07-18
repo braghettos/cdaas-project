@@ -23,7 +23,7 @@
 
 - name: Touch the "{{ ssh_known_hosts_file }}"
   file:
-    path: "{{ ssh_auth_keys_file }}"
+    path: "{{ ssh_known_hosts_file }}"
     state: touch	
     mode: "u=rw,g=r,o=r"
   
