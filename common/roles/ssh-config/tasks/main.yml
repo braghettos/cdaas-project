@@ -37,6 +37,7 @@
 - name: Set up multiple authorized keys 
   authorized_key:
     state: present
+    user: awx
     key: "{{ item.stdout }}"
     path: "{{ ssh_known_hosts_file }}"
   with_items: "{{ ssh_known_host_results.results }}"
