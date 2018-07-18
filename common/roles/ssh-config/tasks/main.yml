@@ -21,6 +21,12 @@
 #  debug:
 #     msg: "{{ ansible_ssh_pass }}"
 
+- name: create "{{ ssh_directory }}" directory if it doesn't exist
+- file:
+    path: "{{ ssh_directory }}"
+    state: directory
+    mode: "u=rw,g=r,o=r"
+
 - name: Touch the "{{ ssh_known_hosts_file }}"
   file:
     path: "{{ ssh_known_hosts_file }}"
