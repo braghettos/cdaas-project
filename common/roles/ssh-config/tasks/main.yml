@@ -13,6 +13,8 @@
     state: "absent"
     path: "{{ ssh_known_hosts_file }}"
   with_items: "{{ ssh_known_host_results.results }}"
+  become: yes
+  become_user: root
   
 - name: Add/update the public key in the '{{ ssh_known_hosts_file }}'
   known_hosts:
