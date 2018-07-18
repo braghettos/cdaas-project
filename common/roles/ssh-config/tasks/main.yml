@@ -22,7 +22,7 @@
 #     msg: "{{ ansible_ssh_pass }}"
 
 - name: create "{{ ssh_directory }}" directory if it doesn't exist
-- file:
+  file:
     path: "{{ ssh_directory }}"
     state: directory
     mode: "u=rw,g=r,o=r"
