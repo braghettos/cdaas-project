@@ -16,6 +16,7 @@
   - ssh-config
 
 - hosts: target 
+  gather_facts: no
 
   roles:
   - ping-target
