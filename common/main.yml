@@ -10,6 +10,7 @@
     ssh_known_hosts_command: "ssh-keyscan -T 10"
     ssh_directory: "{{ lookup('env','HOME') + '/.ssh/' }}"
     ssh_known_hosts_file: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
+    ssh_id_rsa_file: "{{ lookup('env','HOME') + '/.ssh/id_rsa' }}"
     ssh_auth_keys_file: "{{ lookup('env','HOME') + '/.ssh/authorized_key' }}"
     ssh_known_hosts: "{{ groups['target'] }}"
     machine:
