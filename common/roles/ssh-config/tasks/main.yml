@@ -1,6 +1,10 @@
 ---
 # tasks file for config-ssh
 
+- name: return hostname
+  command: hostname
+  register: myhostname
+
 - name: For each host, scan for its ssh public key
   shell: "ssh-keyscan {{ item }}"
   with_items: "{{ ssh_known_hosts }}"
