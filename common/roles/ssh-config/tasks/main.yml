@@ -16,6 +16,7 @@
 - name: Touch the "{{ ssh_auth_keys_file }}" file
   file:
     path: "{{ ssh_auth_keys_file }}"
+    state: touch
     mode: "u=rw,g=r,o=r"
  
 - name: Remove the public key in the '{{ ssh_known_hosts_file }}'
