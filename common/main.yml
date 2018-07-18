@@ -12,6 +12,8 @@
     ssh_known_hosts_file: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
     ssh_auth_keys_file: "{{ lookup('env','HOME') + '/.ssh/authorized_key' }}"
     ssh_known_hosts: "{{ groups['target'] }}"
+    machine:
+      username: '{{ ansible_user }}'
   
   roles:
   - ssh-config
