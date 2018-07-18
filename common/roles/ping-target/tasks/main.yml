@@ -1,7 +1,6 @@
 ---
 # tasks file for ping-target
 
-tasks:
-  - name: ping	
-    ping:
+- name: ping	
+  ping:
 
