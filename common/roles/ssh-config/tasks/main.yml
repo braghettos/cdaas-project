@@ -42,7 +42,7 @@
   with_items: "{{ ssh_known_host_results.results }}"
   
 - name: For each host, ssh-copy-id my ssh public keys to the host
-  shell: "ssh-copy-id {{ item }}"
+  shell: "ssh-copy-id root@{{ item }}"
   with_items: "{{ ssh_known_hosts }}"
 
 #- name: For each host, ssh-copy-id my ssh public keys to the host
