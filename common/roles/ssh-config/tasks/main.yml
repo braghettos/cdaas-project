@@ -6,14 +6,20 @@
   with_items: "{{ ssh_known_hosts }}"
   register: ssh_known_host_results
   ignore_errors: yes
-    
+  
+# touch the "{{ ssh_auth_keys_file }}" file
+- file:
+    path: "{{ ssh_auth_keys_file }}"
+    state: touch
+    mode: "u=rw,g=r,o=r"
+ 
 - name: Remove the public key in the '{{ ssh_known_hosts_file }}'
   known_hosts:
     name: "{{ item.item }}"
     state: "absent"
     path: "{{ ssh_known_hosts_file }}"
   with_items: "{{ ssh_known_host_results.results }}"
-  
+    
 - name: Add/update the public key in the '{{ ssh_auth_keys_file }}'
   known_hosts:
     name: "{{ item.item }}"
