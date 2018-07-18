@@ -4,7 +4,7 @@
 # Apply common configuration to all hosts
 - hosts: localhost
   connection: local
-  gather_facts: no
+  gather_facts: yes
   
   vars:
     ssh_known_hosts_command: "ssh-keyscan -T 10"
