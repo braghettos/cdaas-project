@@ -1,20 +1,7 @@
 ---
 # tasks file for config-ssh
 
-- debug:
-    var: machine
 
-- name: Generate SSH keys
-  shell: ssh-keygen -b 2048 -t rsa -f "{{ ssh_id_rsa_file }}" -q -N ""
-  args:
-    creates: "{{ ssh_id_rsa_file }}"
-
-- name: For each host, scan for its ssh public key
-  shell: "ssh-keyscan {{ item }}"
-  with_items: "{{ ssh_known_hosts }}"
-  register: ssh_known_host_results
-  ignore_errors: yes
-  
 #- name: Remove the public key in the '{{ ssh_known_hosts_file }}'
 #  known_hosts:
 #    name: "{{ item.item }}"
@@ -31,12 +18,23 @@
     path: "{{ ssh_directory }}"
     state: directory
     mode: 0755
+    
+- name: Generate SSH keys
+  shell: ssh-keygen -b 2048 -t rsa -f "{{ ssh_id_rsa_file }}" -q -N ""
+  args:
+    creates: "{{ ssh_id_rsa_file }}"
 
 - name: Touch the "{{ ssh_known_hosts_file }}"
   file:
     path: "{{ ssh_known_hosts_file }}"
     state: touch	
     mode: "u=rw,g=r,o=r"
+  
+- name: For each host, scan for its ssh public key
+  shell: "ssh-keyscan {{ item }}"
+  with_items: "{{ ssh_known_hosts }}"
+  register: ssh_known_host_results
+  ignore_errors: yes  
   
 - name: Add/update the public key in the '{{ ssh_known_hosts_file }}'
   known_hosts:
