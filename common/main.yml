@@ -24,3 +24,9 @@
 
   roles:
   - ping-target
+
+- hosts: dgw 
+  gather_facts: no
+
+  roles:
+  - jboss-standalone
