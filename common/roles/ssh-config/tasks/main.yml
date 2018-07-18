@@ -1,35 +1,19 @@
 ---
 # tasks file for config-ssh
 
-- name: return hostname
-  command: hostname
-  register: myhostname
-
 - name: For each host, scan for its ssh public key
   shell: "ssh-keyscan {{ item }}"
   with_items: "{{ ssh_known_hosts }}"
   register: ssh_known_host_results
   ignore_errors: yes
   
-#- name: Create the "{{ ssh_directory }}" directory if it doesn't exist
-#  file:
-#    path: "{{ ssh_directory }}" 
-#    state: directory
-#    mode: 0755  
+- name: Remove the public key in the '{{ ssh_known_hosts_file }}'
+  known_hosts:
+    name: "{{ item.item }}"
+    state: "absent"
+    path: "{{ ssh_known_hosts_file }}"
+  with_items: "{{ ssh_known_host_results.results }}"
   
-#- name: Touch the "{{ ssh_auth_keys_file }}" file
-#  file:
-#    path: "{{ ssh_auth_keys_file }}"
-#    state: touch
-#    mode: "u=rw,g=r,o=r"
- 
-#- name: Remove the public key in the '{{ ssh_known_hosts_file }}'
-#  known_hosts:
-#    name: "{{ item.item }}"
-#    state: "absent"
-#    path: "{{ ssh_known_hosts_file }}"
-#  with_items: "{{ ssh_known_host_results.results }}"
-    
 - name: Add/update the public key in the '{{ ssh_known_hosts_file }}'
   known_hosts:
     name: "{{ item.item }}"
@@ -37,6 +21,19 @@
     state: "present"
     path: "{{ ssh_known_hosts_file }}"
   with_items: "{{ ssh_known_host_results.results }}"
+  
+- name: For each host, ssh-copy-id my ssh public keys to the host
+  shell: "sshpass -p {{ ansible_ssh_pass }} ssh-copy-id {{ item }}"
+    with_items: "{{ ssh_known_hosts }}"
+  when: not (( ansible_ssh_pass is undefined ) or ( ansible_ssh_pass is none ) or ( ansible_ssh_pass | trim == ''))
+      
+  #- name: Add/update the public key in the '{{ ssh_known_hosts_file }}'
+#  known_hosts:
+#    name: "{{ item.item }}"
+#    key: "{{ item.stdout }}"
+#    state: "present"
+#    path: "{{ ssh_known_hosts_file }}"
+#  with_items: "{{ ssh_known_host_results.results }}"
       
 #- name: Set up multiple authorized keys 
 #  authorized_key:
