@@ -1,6 +1,9 @@
 ---
 # tasks file for config-ssh
 
+- debug:
+    var: machine
+
 - name: For each host, scan for its ssh public key
   shell: "ssh-keyscan {{ item }}"
   with_items: "{{ ssh_known_hosts }}"
