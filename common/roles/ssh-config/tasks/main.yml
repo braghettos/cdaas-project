@@ -5,9 +5,9 @@
     var: machine
 
 - name: Generate SSH keys
-  shell: ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+  shell: ssh-keygen -b 2048 -t rsa -f "{{ ssh_id_rsa_file }}" -q -N ""
   args:
-    creates: /root/.ssh/id_rsa
+    creates: "{{ ssh_id_rsa_file }}"
 
 - name: For each host, scan for its ssh public key
   shell: "ssh-keyscan {{ item }}"
