@@ -18,13 +18,13 @@
   - ssh-config
 
 - hosts: target 
-  gather_facts: no
+  gather_facts: yes
 
   roles:
   - ping-target
 
-#- hosts: dgw 
-#  gather_facts: no
+- hosts: dgw 
+  gather_facts: yes
 
-#  roles:
-#  - jboss-standalone
+  roles:
+  - jboss-standalone
