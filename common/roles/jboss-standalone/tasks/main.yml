@@ -11,7 +11,7 @@
   - libselinux-python
   - libsemanage-python
   become: yes
-#  become_user: root
+  become_user: awx
 
 - name: Download JBoss from jboss.org
   get_url: 
