@@ -10,7 +10,9 @@
   - java-1.7.0-openjdk
   - libselinux-python
   - libsemanage-python
-  become_method: su
+  become: yes
+  become_user: root
+  become_method: sudo su
 
 - name: Download JBoss from jboss.org
   get_url: 
