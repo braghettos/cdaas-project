@@ -47,6 +47,9 @@
   become: yes
   become_user: root
   become_method: sudo
+  with_items:
+  - http_port: 80
+  - https_port: 443
 
 - name: Add group "jboss"
   group: 
