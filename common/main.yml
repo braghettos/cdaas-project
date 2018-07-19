@@ -13,8 +13,6 @@
     ssh_id_rsa_file: "{{ lookup('env','HOME') + '/.ssh/id_rsa' }}"
     ssh_auth_keys_file: "{{ lookup('env','HOME') + '/.ssh/authorized_key' }}"
     ssh_known_hosts: "{{ groups['target'] }}"
-    machine:
-      username: '{{ ansible_user }}'
   
   roles:
   - ssh-config
