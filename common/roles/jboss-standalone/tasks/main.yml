@@ -35,22 +35,34 @@
   # Rename the dir to avoid encoding the version in the init script
 - name: Rename install directory
   command: chdir=/usr/share /bin/mv jboss-as-7.1.1.Final jboss-as creates=/usr/share/jboss-as
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Copying standalone.xml configuration file
   template: 
     src: standalone.xml 
     dest: /usr/share/jboss-as/standalone/configuration/
   notify: restart jboss
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Add group "jboss"
   group: 
     name: jboss
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Add user "jboss"
   user: 
     name: jboss 
     group: jboss 
     home: /usr/share/jboss-as
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Change ownership of JBoss installation
   file: 
@@ -59,22 +71,34 @@
     group: jboss 
     state: directory 
     recurse: yes
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Copy the init script
   copy: 
     src: jboss-as-standalone.sh 
     dest: /etc/init.d/jboss 
     mode: 0755
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Workaround for systemd bug
   shell: service jboss start && chkconfig jboss on
   ignore_errors: yes
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Enable JBoss to be started at boot
   service: 
     name: jboss 
     enabled: yes 
     state: started
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: deploy iptables rules
   template: 
@@ -82,18 +106,27 @@
     dest: /etc/sysconfig/iptables
   when: ansible_distribution_major_version != "7" 
   notify: restart iptables
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Ensure that firewalld is installed
   yum: 
     name: firewalld 
     state: present
   when: ansible_distribution_major_version == "7" 
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Ensure that firewalld is started
   service: 
     name: firewalld 
     state: started
   when: ansible_distribution_major_version == "7" 
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: deploy firewalld rules
   firewalld: 
@@ -105,3 +138,6 @@
   with_items:
   - "{{ http_port }}/tcp"
   - "{{ https_port }}/tcp"
+  become: yes
+  become_user: root
+  become_method: sudo
