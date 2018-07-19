@@ -12,7 +12,7 @@
   - libsemanage-python
   become: yes
   become_user: root
-  become_method: sudo su
+  become_method: sudo
 
 - name: Download JBoss from jboss.org
   get_url: 
