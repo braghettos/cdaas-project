@@ -18,6 +18,9 @@
   get_url: 
     url: http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip 
     dest: /opt/jboss-as-7.1.1.Final.zip
+  become: yes
+  become_user: root
+  become_method: sudo
 
 - name: Extract archive
   unarchive: 
@@ -25,6 +28,9 @@
     src: /opt/jboss-as-7.1.1.Final.zip 
     creates: /usr/share/jboss-as 
     copy: no 
+  become: yes
+  become_user: root
+  become_method: sudo
 
   # Rename the dir to avoid encoding the version in the init script
 - name: Rename install directory
