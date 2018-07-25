@@ -7,7 +7,7 @@
 
 - name: Deploy HelloWorld to JBoss Wildfly
   jboss:
-    deploy_path=opt/jboss/wildfly/standalone/deployments/
+    deploy_path: /opt/jboss/wildfly/standalone/deployments/
     src: /tmp/jboss-helloworld.war
     deployment: jboss-helloworld.war
     state: present
