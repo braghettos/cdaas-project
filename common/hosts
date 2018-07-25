@@ -1,3 +1,5 @@
 [target]
 awx_centos
+
+[dgw]
 awx_jboss-wildfly
