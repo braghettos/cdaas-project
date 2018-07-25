@@ -1,5 +1,5 @@
 [target]
-awx_centos
+awx_centos7
 
 [dgw]
 awx_jboss-wildfly
