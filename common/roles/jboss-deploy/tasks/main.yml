@@ -11,3 +11,6 @@
     src: /tmp/jboss-helloworld.war
     deployment: jboss-helloworld.war
     state: present
+    become: yes
+    become_user: root
+    become_method: sudo
