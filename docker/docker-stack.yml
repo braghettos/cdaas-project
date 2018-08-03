@@ -1,1 +1,141 @@
+version: "3.6"
+services:
+  postgres:
+    image: postgres:9.6
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      SECRET_KEY: "awxsecret"
+      POSTGRES_DB: "awx"
+      POSTGRES_USER: "awx"
+      POSTGRES_PASSWORD: "awxpass"
+    networks:
+      - devopsnet
 
+  rabbitmq:
+    image: rabbitmq:3
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      RABBITMQ_DEFAULT_VHOST: "awx"
+    networks:
+      - devopsnet
+
+  memcached:
+    image: memcached:alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - devopsnet
+
+  awx_task:
+    image: ansible/awx_task:1.0.5
+    hostname: awx
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      SECRET_KEY: "awxsecret"
+      DATABASE_NAME: "awx"
+      DATABASE_USER: "awx"
+      DATABASE_PASSWORD: "awxpass"
+      DATABASE_PORT: "5432"
+      DATABASE_HOST: "postgres"
+      RABBITMQ_USER: "guest"
+      RABBITMQ_PASSWORD: "guest"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: "5672"
+      RABBITMQ_VHOST: "awx"
+      MEMCACHED_HOST: "memcached"
+      MEMCACHED_PORT: "11211"
+    networks:
+      - devopsnet
+
+  awx_web:
+    image: ansible/awx_web:1.0.5
+    hostname: awxweb
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8052:8052"
+    environment:
+      SECRET_KEY: "awxsecret"
+      DATABASE_NAME: "awx"
+      DATABASE_USER: "awx"
+      DATABASE_PASSWORD: "awxpass"
+      DATABASE_PORT: "5432"
+      DATABASE_HOST: "postgres"
+      RABBITMQ_USER: "guest"
+      RABBITMQ_PASSWORD: "guest"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: "5672"
+      RABBITMQ_VHOST: "awx"
+      MEMCACHED_HOST: "memcached"
+      MEMCACHED_PORT: "11211"
+    networks:
+      - devopsnet
+
+  centos7:
+    image: braghettos/ssh:centos7
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - devopsnet
+
+  jboss-wildfly:
+    image: braghettos/jboss-ssh:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - devopsnet
+
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    hostname: 'gitlab.example.com'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.example.com:8053'
+    ports:
+    - '8053:8053'
+    networks:
+      - devopsnet
+
+  artifactory:
+    image: docker.bintray.io/jfrog/artifactory-oss:6.1.0
+    hostname: artifactory
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+     - "8081:8081"
+    #Add extra Java options by uncommenting the following lines
+    environment:
+     - EXTRA_JAVA_OPTIONS=-Xmx3g
+    networks:
+      - devopsnet
+
+networks:
+  devopsnet:
+    driver: overlay
+    ipam:
+      config:
+      - subnet: 10.10.9.0/24
+    
