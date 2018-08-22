@@ -1,4 +1,4 @@
-FROM docker:1.12
+FROM docker:1.12.6
 
 ARG user=jenkins
 ARG group=jenkins
